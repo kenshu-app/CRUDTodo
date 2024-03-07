@@ -9,16 +9,31 @@
         opacity: 0.3;
         text-decoration: line-through;
       }
+      .edit {
+        display: none;
+      }
+      .editing .edit {
+        display: inline;
+      }
     </style>
-  </head> 
+  </head>
   <body>
     <div id="app">
       <h1>{{ state.title }}</h1>
       <input v-model="state.newMsg" @keyup.enter="addTodo" autofocus />
       <ul>
-        <li v-for="todo in state.todos" :class="{done: todo.completed}" :key="todo.id">
+        <li
+          v-for="todo in state.todos"
+          :class="{done: todo.completed, editing: todo === state.editObj}"
+          :key="todo.id"
+        >
           <input type="checkbox" v-model="todo.completed" />
-          {{ todo.msg }}
+          <label @dblclick="editTodo(todo)"> {{ todo.msg }} </label>&nbsp;
+          <input
+            class="edit"
+            v-model="state.editMsg"
+            @keyup.enter="updateTodo(todo)"
+          />&nbsp;
           <button @click="deleteTodo(todo)">X</button>
         </li>
       </ul>
@@ -31,21 +46,32 @@
             title: 'CRUD Todo',
             newMsg: '',
             todos: [],
+            editObj: null,
+            editMsg: '',
           })
           const addTodo = () => {
             if (!state.newMsg) return
             state.todos.push({
-              id: (new Date()).getTime(),
+              id: new Date().getTime(),
               completed: false,
               msg: state.newMsg,
             })
             state.newMsg = ''
           }
+          const editTodo = (todoObj) => {
+            state.editObj = todoObj // 1件分のオブジェクトを代入
+            state.editMsg = todoObj.msg // 1件分のタイトルを代入
+          }
+          const updateTodo = (todoObj) => {
+            todoObj.msg = state.editMsg
+            state.editObj = null
+            state.editMsg = ''
+          }
           const deleteTodo = (todoObj) => {
             const delIndex = state.todos.indexOf(todoObj)
             state.todos.splice(delIndex, 1)
           }
-          return { state, addTodo, deleteTodo }
+          return { state, addTodo, editTodo, updateTodo, deleteTodo }
         },
       }).mount('#app')
     </script>
