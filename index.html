@@ -32,7 +32,7 @@
   </head>
   <body class="h-full">
     <div id="app" class="py-40 bg-gray-100">
-      <div class="max-w-2xl mx-auto">
+      <div class="max-w-2xl mx-auto py-4 px-6 bg-white shadow rounded">
         <div class="px-4 sm:px-0">
           <h3 class="text-base font-semibold leading-7 text-gray-900">
             {{ state.title }}
@@ -43,12 +43,13 @@
         </div>
         <div class="mt-6 border-t border-gray-100">
           <dl class="divide-y divide-gray-100">
-            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <div class="px-4 py-6 sm:grid sm:grid-cols-auto sm:px-0">
+              <div v-if="state.error" class="error sm:grid-span-auto py-5 px-5 mb-3 text-center tracking-widest rounded bg-red-100 text-red-800">{{ state.errorMessage }}</div>
               <div
-                class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
+                class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600"
               >
                 <span
-                  class="flex select-none items-center pl-3 text-gray-500 sm:text-sm"
+                  class="flex select-none border items-center px-10 text-gray-500 sm:text-sm"
                   >Todo</span
                 >
                 <input
@@ -60,46 +61,58 @@
                 />
               </div>
             </div>
-            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-              <dt class="text-sm font-medium leading-6 text-gray-900">
-                Application for
+            <div
+              v-for="(todo, index) in state.todos"
+              :class="{done: todo.completed, editing: todo === state.editObj, ['bg-gray-50']: (index % 2) === 0}"
+              :key="todo.id"
+              class="px-4 py-6 sm:grid sm:grid-cols-9 sm:gap-4 sm:px-0"
+            >
+              <dt
+                class="text-sm pl-10 mt-3 font-medium leading-6 text-gray-900 sm:col-span-3"
+              >
+                {{ todo.id }}
+                <input
+                  type="checkbox"
+                  v-model="todo.completed"
+                  class="ml-4 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                />
               </dt>
               <dd
-                class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
+                class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-4 sm:mt-0"
               >
-                Backend Developer
+                <label
+                  @dblclick="editTodo(todo)"
+                  class="mt-1 text-2xl font-bold"
+                >
+                  {{ todo.msg }}
+                </label>
+                <input
+                  class="edit mt-1 ml-4 p-2 border border-gray-300 rounded-md form-input w-auto transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                  v-model="state.editMsg"
+                  @keyup.enter="updateTodo(todo)"
+                />
               </dd>
-            </div>
-            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-              <dt class="text-sm font-medium leading-6 text-gray-900">
-                Email address
-              </dt>
-              <dd
-                class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
-              >
-                margotfoster@example.com
-              </dd>
-            </div>
-            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-              <dt class="text-sm font-medium leading-6 text-gray-900">
-                Salary expectation
-              </dt>
-              <dd
-                class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
-              >
-                $120,000
-              </dd>
-            </div>
-            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-              <dt class="text-sm font-medium leading-6 text-gray-900">About</dt>
-              <dd
-                class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
-              >
-                Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim
-                incididunt cillum culpa consequat. Excepteur qui ipsum aliquip
-                consequat sint. Sit id mollit nulla mollit nostrud in ea officia
-                proident. Irure nostrud pariatur mollit ad adipisicing
-                reprehenderit deserunt qui eu.
+              <dd class="sm:mt-0 sm:col-span-2">
+                <button
+                  @click="deleteTodo(todo)"
+                  class="inline-flex rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-5 h-5 mr-1"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                    />
+                  </svg>
+                  Delete
+                </button>
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -182,20 +195,7 @@
       <!-- ここから↓既存のアプリケーション機能 -->
       <span class="error" v-if="state.error">{{ state.errorMessage }}</span>
       <ul>
-        <li
-          v-for="todo in state.todos"
-          :class="{done: todo.completed, editing: todo === state.editObj}"
-          :key="todo.id"
-        >
-          <input type="checkbox" v-model="todo.completed" />
-          <label @dblclick="editTodo(todo)"> {{ todo.msg }} </label>&nbsp;
-          <input
-            class="edit"
-            v-model="state.editMsg"
-            @keyup.enter="updateTodo(todo)"
-          />&nbsp;
-          <button @click="deleteTodo(todo)">X</button>
-        </li>
+        <li>&nbsp;</li>
       </ul>
       <div v-if="existsTodo()">
         登録件数&nbsp;<strong>{{ todoCount() }}</strong>個
@@ -223,7 +223,7 @@
               return
             }
             state.todos.push({
-              id: new Date().getTime(),
+              id: new Date().getTime().toString().slice(-4),
               completed: false,
               msg: state.newMsg,
             })
