@@ -15,12 +15,19 @@
       .editing .edit {
         display: inline;
       }
+      .error {
+        color: #900;
+        font-weight: bold;
+        font-size: 0.8em;
+        margin-left: 10px;
+      }
     </style>
   </head>
   <body>
     <div id="app">
       <h1>{{ state.title }}</h1>
       <input v-model="state.newMsg" @keyup.enter="addTodo" autofocus />
+      <span class="error" v-if="state.error">{{ state.errorMessage }}</span>
       <ul>
         <li
           v-for="todo in state.todos"
@@ -51,18 +58,24 @@
             todos: [],
             editObj: null,
             editMsg: '',
+            error: false,
+            errorMessage: '※ 値を入力してください',
           })
           Vue.onMounted(() => {
             getTodos()
           })
           const addTodo = () => {
-            if (!state.newMsg) return
+            if (!state.newMsg) {
+              state.error = true
+              return
+            }
             state.todos.push({
               id: new Date().getTime(),
               completed: false,
               msg: state.newMsg,
             })
             state.newMsg = ''
+            state.error = false
             addTodos()
           }
           const editTodo = (todoObj) => {
