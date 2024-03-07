@@ -37,6 +37,9 @@
           <button @click="deleteTodo(todo)">X</button>
         </li>
       </ul>
+      <div v-if="existsTodo()">
+        登録件数&nbsp;<strong>{{ todoCount() }}</strong>個
+      </div>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
@@ -86,7 +89,21 @@
               state.todos = JSON.parse(todos)
             }
           }
-          return { state, addTodo, editTodo, updateTodo, deleteTodo }
+          const existsTodo = () => {
+            return state.todos.length > 0
+          }
+          const todoCount = () => {
+            return state.todos.length.toString()
+          }
+          return {
+            state,
+            addTodo,
+            editTodo,
+            updateTodo,
+            deleteTodo,
+            existsTodo,
+            todoCount,
+          }
         },
       }).mount('#app')
     </script>
