@@ -44,14 +44,21 @@
         <div class="mt-6 border-t border-gray-100">
           <dl class="divide-y divide-gray-100">
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-              <dt class="text-sm font-medium leading-6 text-gray-900">
-                Full name
-              </dt>
-              <dd
-                class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
+              <div
+                class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
               >
-                Margot Foster
-              </dd>
+                <span
+                  class="flex select-none items-center pl-3 text-gray-500 sm:text-sm"
+                  >Todo</span
+                >
+                <input
+                  v-model="state.newMsg"
+                  @keyup.enter="addTodo"
+                  autofocus
+                  class="block flex-1 bg-transparent p-4 border text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                  placeholder="Todo Message"
+                />
+              </div>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
               <dt class="text-sm font-medium leading-6 text-gray-900">
@@ -172,7 +179,7 @@
           </dl>
         </div>
       </div>
-      <input v-model="state.newMsg" @keyup.enter="addTodo" autofocus />
+      <!-- ここから↓既存のアプリケーション機能 -->
       <span class="error" v-if="state.error">{{ state.errorMessage }}</span>
       <ul>
         <li
