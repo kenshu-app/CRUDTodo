@@ -49,6 +49,9 @@
             editObj: null,
             editMsg: '',
           })
+          Vue.onMounted(() => {
+            getTodos()
+          })
           const addTodo = () => {
             if (!state.newMsg) return
             state.todos.push({
@@ -57,6 +60,7 @@
               msg: state.newMsg,
             })
             state.newMsg = ''
+            addTodos()
           }
           const editTodo = (todoObj) => {
             state.editObj = todoObj // 1件分のオブジェクトを代入
@@ -66,10 +70,21 @@
             todoObj.msg = state.editMsg
             state.editObj = null
             state.editMsg = ''
+            addTodos()
           }
           const deleteTodo = (todoObj) => {
             const delIndex = state.todos.indexOf(todoObj)
             state.todos.splice(delIndex, 1)
+            addTodos()
+          }
+          const addTodos = () => {
+            localStorage.setItem('todos', JSON.stringify(state.todos))
+          }
+          const getTodos = () => {
+            const todos = localStorage.getItem('todos')
+            if (todos) {
+              state.todos = JSON.parse(todos)
+            }
           }
           return { state, addTodo, editTodo, updateTodo, deleteTodo }
         },
