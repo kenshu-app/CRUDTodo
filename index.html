@@ -10,13 +10,13 @@
         text-decoration: line-through;
       }
     </style>
-  </head>
+  </head> 
   <body>
     <div id="app">
       <h1>{{ state.title }}</h1>
       <input v-model="state.newMsg" @keyup.enter="addTodo" autofocus />
       <ul>
-        <li v-for="todo in state.todos" :class="{done: todo.completed}">
+        <li v-for="todo in state.todos" :class="{done: todo.completed}" :key="todo.id">
           <input type="checkbox" v-model="todo.completed" />
           {{ todo.msg }}
           <button @click="deleteTodo(todo)">X</button>
@@ -35,6 +35,7 @@
           const addTodo = () => {
             if (!state.newMsg) return
             state.todos.push({
+              id: (new Date()).getTime(),
               completed: false,
               msg: state.newMsg,
             })
