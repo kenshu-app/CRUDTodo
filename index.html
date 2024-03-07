@@ -4,13 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CRUDTodo</title>
+    <style>
+      .done {
+        opacity: 0.3;
+        text-decoration: line-through;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
       <h1>{{ state.title }}</h1>
       <input v-model="state.newMsg" @keyup.enter="addTodo" autofocus />
       <ul>
-        <li v-for="todo in state.todos">{{ todo.msg }}</li>
+        <li v-for="todo in state.todos" :class="{done: todo.completed}">
+          <input type="checkbox" v-model="todo.completed" />
+          {{ todo.msg }}
+        </li>
       </ul>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -18,18 +27,21 @@
       Vue.createApp({
         setup() {
           const state = Vue.reactive({
-            title: "CRUD Todo",
-            newMsg: "",
+            title: 'CRUD Todo',
+            newMsg: '',
             todos: [],
-          });
+          })
           const addTodo = () => {
-            if (!state.newMsg) return;
-            state.todos.push({ msg: state.newMsg });
-            state.newMsg = "";
-          };
-          return { state, addTodo };
+            if (!state.newMsg) return
+            state.todos.push({
+              completed: false,
+              msg: state.newMsg,
+            })
+            state.newMsg = ''
+          }
+          return { state, addTodo }
         },
-      }).mount("#app");
+      }).mount('#app')
     </script>
   </body>
 </html>
