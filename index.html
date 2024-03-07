@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUDTodo</title>
+</head>
+<body>
+    <div id="app">
+        <h1>{{ state.title }}</h1>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        Vue.createApp({
+            setup() {
+                const state = Vue.reactive({
+                    title: 'CRUD Todo'
+                })
+                return { state }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
