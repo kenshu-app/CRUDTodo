@@ -1,29 +1,35 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CRUDTodo</title>
-</head>
-<body>
+  </head>
+  <body>
     <div id="app">
-        <h1>{{ state.title }}</h1>
-        <input v-model="state.title">
-        <ul>
-            <li v-for="todo in state.todos">{{ todo }}</li>
-        </ul>
+      <h1>{{ state.title }}</h1>
+      <input v-model="state.newMsg" @keyup.enter="addTodo" autofocus />
+      <ul>
+        <li v-for="todo in state.todos">{{ todo.msg }}</li>
+      </ul>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
-        Vue.createApp({
-            setup() {
-                const state = Vue.reactive({
-                    title: 'CRUD Todo',
-                    todos: ['ES2015', 'webpack', 'babel', 'VueJS']
-                })
-                return { state }
-            }
-        }).mount('#app')
+      Vue.createApp({
+        setup() {
+          const state = Vue.reactive({
+            title: "CRUD Todo",
+            newMsg: "",
+            todos: [],
+          });
+          const addTodo = () => {
+            if (!state.newMsg) return;
+            state.todos.push({ msg: state.newMsg });
+            state.newMsg = "";
+          };
+          return { state, addTodo };
+        },
+      }).mount("#app");
     </script>
-</body>
+  </body>
 </html>
