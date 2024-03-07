@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="h-full">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -30,15 +30,15 @@
       }
     </style>
   </head>
-  <body>
+  <body class="h-full">
     <div id="app" class="py-40 bg-gray-100">
       <div class="max-w-2xl mx-auto">
         <div class="px-4 sm:px-0">
           <h3 class="text-base font-semibold leading-7 text-gray-900">
-            Applicant Information
+            {{ state.title }}
           </h3>
           <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
-            Personal details and application.
+            Build a Todo List App with VueJS
           </p>
         </div>
         <div class="mt-6 border-t border-gray-100">
@@ -172,8 +172,6 @@
           </dl>
         </div>
       </div>
-
-      <h1>{{ state.title }}</h1>
       <input v-model="state.newMsg" @keyup.enter="addTodo" autofocus />
       <span class="error" v-if="state.error">{{ state.errorMessage }}</span>
       <ul>
