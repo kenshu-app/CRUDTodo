@@ -8,13 +8,17 @@
 <body>
     <div id="app">
         <h1>{{ state.title }}</h1>
+        <ul>
+            <li v-for="todo in state.todos">{{ todo }}</li>
+        </ul>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
         Vue.createApp({
             setup() {
                 const state = Vue.reactive({
-                    title: 'CRUD Todo'
+                    title: 'CRUD Todo',
+                    todos: ['ES2015', 'webpack', 'babel', 'VueJS']
                 })
                 return { state }
             }
